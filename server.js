@@ -1,8 +1,6 @@
 const express = require('express');
 const connectDB = require('./config/db'); 
 
-//const users = require('./routes/api/v1/users');
-
 const app = express();
 
 // Connect Database 
