@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Petman CMS",
   "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "server": "nodemon server"
+  },
   "author": "HixOba",
   "license": "GPLv3",
   "dependencies": {
