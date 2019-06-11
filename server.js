@@ -1,5 +1,7 @@
 const express = require('express');
-const connectDB = require('./config/db');
+const connectDB = require('./config/db'); 
+
+//const users = require('./routes/api/v1/users');
 
 const app = express();
 
@@ -8,6 +10,13 @@ connectDB();
 
 // End points
 app.get('/', (req, res) => res.send('API connected..'));
+
+// Define Routes
+app.use('/api/v1/users', require('./routes/api/v1/users'));
+app.use('/api/v1/owner', require('./routes/api/v1/owner'));
+app.use('/api/v1/pet', require('./routes/api/v1/pet'));
+app.use('/api/v1/todos', require('./routes/api/v1/todos'));
+
 
 const PORT = process.env.PORT || 5000;
 
