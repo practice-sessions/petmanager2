@@ -1,10 +1,13 @@
 const express = require('express');
-const connectDB = require('./config/db'); 
+const connectDB = require('./config/db');
 
 const app = express();
 
 // Connect Database 
 connectDB();
+
+// Initialise middleware
+app.use(express.json({ extended: false })); 
 
 // End points
 app.get('/', (req, res) => res.send('API connected..'));
