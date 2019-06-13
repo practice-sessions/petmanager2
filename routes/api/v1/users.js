@@ -15,9 +15,7 @@ apiRouter.post(
       .isEmpty(),
     check('contactnumber', 'Your contact number is required')
     .isNumeric()
-    .not()
-    .isLength({ min: 4 })
-  ], 
+  ],  
   (req, res) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()) {
