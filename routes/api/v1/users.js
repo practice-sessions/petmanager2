@@ -3,6 +3,8 @@ const apiRouter = express.Router();
 const { check, validationResult } = require('express-validator/check');
 //const gravatar = require('gravatar'); 
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
 // Load User model
 const User = require('../../../models/User');
@@ -41,9 +43,9 @@ apiRouter.post(
     /*
     // Get users gravatar/pix if available
     const avatar = gravatar.url(email, {
-      s: '200', // Size default
+      s: '200', // Size default 
       r: 'pg', // Rating
-      d: 'mm' // Default
+      d: 'mm' // Default (hollow image)
     })
     */
 
@@ -64,10 +66,25 @@ apiRouter.post(
     // Save user 
     await user.save();
 
-    // Return jsonwebtoken
+    // Log in user immediately after sign in, 
+    // by returning jsonwebtoken
+    const payload = {
+      user: {
+        id: user.id // Although mongoDB uses _id as ObjectId, 
+                    // mongoose allows us use just id
+      }
+    }
 
-    res.send('User registered'); 
-
+    jwt.sign(
+      payload, 
+      config.get('jwtSecret'),
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      }); // Note: jwtSecret above is in config file' and
+      // 360000 used for expiration (in development), use 3600 in production
+  
 } catch(err) {
   console.error(err.message);
   res.status(500).send('Server error, something went wrong!');
