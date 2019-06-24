@@ -1,5 +1,5 @@
 const express = require('express');
-const connectDB = require('./config/db');
+const connectDB = require('./config/db'); 
 
 const app = express();
 
@@ -13,6 +13,7 @@ app.use(express.json({ extended: false }));
 app.get('/', (req, res) => res.send('API connected..'));
 
 // Define Routes
+app.use('/api/v1/auth', require('./routes/api/v1/auth'));
 app.use('/api/v1/users', require('./routes/api/v1/users'));
 app.use('/api/v1/owner', require('./routes/api/v1/owner'));
 app.use('/api/v1/pet', require('./routes/api/v1/pet'));
