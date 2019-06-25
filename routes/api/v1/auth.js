@@ -35,7 +35,7 @@ apiRouter.post(
     //check('email', 'A valid email is required please').isEmail(),
     check('password', 'Password is required please')
     .exists()
-  ],  
+  ], 
   async (req, res) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()) {
@@ -45,7 +45,7 @@ apiRouter.post(
   const { contactnumber, password } = req.body;
 
   try {
-  // Check if user does exist
+  // Check if user does exist 
   let user = await User.findOne({contactnumber});
 
   if(!user) {
