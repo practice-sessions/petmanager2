@@ -23,7 +23,7 @@ apiRouter.get('/', auth, async (req, res) => {
 });
 
 // @route   POST api/auth  
-// @desc    Authenticate user, get token
+// @desc    Authenticate user with password, get token
 // @access  Public
 apiRouter.post(
   '/',  
