@@ -14,15 +14,17 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     //required: true,
-    index: true,
     unique: true,
-    //sparse: true // This tells mongoDB to allow null values [No effect. WHY?]
-    // for email, which will be filled in later with 'unique' values
+    index: true,
+    partial: true // This should tell mongoDB to allow null values for email,
+    // which will be filled in later with 'unique' values [But. No effect. WHY?]
   },
+  
   password: {
     type: String,
-    required: true 
+   // required: true 
   },
+  
   avatar: {
    type: String
   },
