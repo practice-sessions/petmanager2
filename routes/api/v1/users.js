@@ -22,6 +22,7 @@ apiRouter.post(
       .isEmpty(),
     check('contactnumber', 'Your contact number is required')
     .isNumeric(),
+    //check('email', 'A valid email is required please').isEmail(), 
     check('password', 'Please a password with 4 or more characters')
     .isLength({ min: 4 })
   ],  
@@ -92,4 +93,4 @@ apiRouter.post(
 
 });
 
-module.exports = apiRouter;
+module.exports = apiRouter; 
