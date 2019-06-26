@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     index: true,
     partial: true // This should tell mongoDB to allow null values for email,
-    // which will be filled in later with 'unique' values [But. No effect. WHY?]
+    // which will be filled in later with 'unique' values [But. No effect. WHY?] 
   },
   
   password: {

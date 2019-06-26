@@ -15,7 +15,7 @@ const User = require('../../../models/User');
 apiRouter.post(
   '/register',  
   // isNumeric() used for contact number for now, 
-  //will change to isMobilePhone() later
+  //will change to isMobilePhone() later 
   [
     check('name', 'Your name is required please')
       .not()
