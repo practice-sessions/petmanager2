@@ -9,20 +9,20 @@ const config = require('config');
 // Load User model
 const User = require('../../../models/User');
 
-// @route   POST api/users/register  
+// @route   POST api/v1/users/register 
 // @desc    Register user with auth
 // @access  Public
 apiRouter.post(
   '/register',  
   // isNumeric() used for contact number for now, 
-  //will change to isMobilePhone() later 
+  //will change to isMobilePhone() later
   [
     check('name', 'Your name is required please')
       .not()
       .isEmpty(),
     check('contactnumber', 'Your contact number is required')
     .isNumeric(),
-    check('email', 'A valid email is required please').isEmail(), 
+    check('email', 'A valid email is required please').isEmail().normalizeEmail(), 
     check('password', 'Please a password with 4 or more characters')
     .isLength({ min: 4 })
   ],  
@@ -93,7 +93,7 @@ apiRouter.post(
 
 });
 
-// @route   POST api/users/add  
+// @route   POST api/v1/users/add  
 // @desc    Register user without auth - add user 
 // @access  Public
 apiRouter.post(
@@ -106,7 +106,7 @@ apiRouter.post(
       .isEmpty(),
     check('contactnumber', 'Your contact number is required')
     .isNumeric(),
-    //check('email', 'A valid email is required please').isEmail()
+    //check('email', 'A valid email is required please').isEmail() 
   ],  
   async (req, res) => {
   const errors = validationResult(req);
