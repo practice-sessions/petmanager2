@@ -6,7 +6,7 @@ const app = express();
 // Connect Database 
 connectDB();
 
-// Initialise middleware
+// Initialise middleware 
 app.use(express.json({ extended: false })); 
 
 // End points
@@ -18,6 +18,11 @@ app.use('/api/v1/users', require('./routes/api/v1/users'));
 app.use('/api/v1/owner', require('./routes/api/v1/owner'));
 app.use('/api/v1/pet', require('./routes/api/v1/pet'));
 app.use('/api/v1/todos', require('./routes/api/v1/todos'));
+
+app.use('/api/v2/auth2', require('./routes/api/v2/auth2'));
+app.use('/api/v2/pet_owners', require('./routes/api/v2/pet_owners'));
+//app.use('/api/v2/pet2', require('./routes/api/v2/pet2'));
+//app.use('/api/v2/todos2', require('./routes/api/v2/todos2'));
 
 
 const PORT = process.env.PORT || 5000;
