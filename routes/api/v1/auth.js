@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator/check');
 
-const User = require('../../../models/User');
+const User = require('../../../models/v1/User'); 
 
 // @route   GET api/v1/auth
 // @desc    Get user route, for use where auth is enabled
@@ -28,11 +28,12 @@ apiRouter.get('/', auth, async (req, res) => {
 apiRouter.post(
   '/',  
   // isNumeric() used for contact number for now, 
-  //will change to isMobilePhone() later
+  //will change to isMobilePhone() later 
   [
     check('contactnumber', 'Your contact number is required')
     .isNumeric(),
     //check('email', 'A valid email is required please').isEmail(),
+    //custom email validation method may be needed 
     check('password', 'Password is required please')
     .exists()
   ], 

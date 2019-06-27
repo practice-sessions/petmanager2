@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 
 // Load User model
-const User = require('../../../models/User');
+const User = require('../../../models/v1/User');
 
 // @route   POST api/v1/users/register 
 // @desc    Register user with auth
@@ -21,10 +21,12 @@ apiRouter.post(
       .not()
       .isEmpty(),
     check('contactnumber', 'Your contact number is required')
-    .isNumeric(),
-    check('email', 'A valid email is required please').isEmail().normalizeEmail(), 
+      .isNumeric(),
+    check('email', 'A valid email is required please')
+      .isEmail()
+      .normalizeEmail(), 
     check('password', 'Please a password with 4 or more characters')
-    .isLength({ min: 4 })
+      .isLength({ min: 4 })
   ],  
   async (req, res) => {
   const errors = validationResult(req);
