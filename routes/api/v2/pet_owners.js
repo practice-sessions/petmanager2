@@ -195,6 +195,28 @@ apiRouter.get('/bio', auth, async (req, res) => {
   }
 }); 
 
+// @route   POST api/v2/pet_owners 
+// @desc    Create or update owner bio data 
+// @access  Private
+apiRouter.post('/', 
+[ 
+  auth, 
+  [
+    check('contactnumber', 'Your contact number is required')
+      .isNumeric(),
+    check('address', 'Address information is required')
+      .not()
+      .isEmpty()
+  ] 
+], 
+async (req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
+  const address = req.body.address; 
+
+});
 
 module.exports = apiRouter; 
