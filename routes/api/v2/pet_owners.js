@@ -173,7 +173,7 @@ apiRouter.post(
 });
 
 // @route   GET api/v2/pet_owners/bio 
-// @desc    Get current pet owner's bio data by id 
+// @desc    Get current pet owner's bio data by id  
 // @access  Public (for now). Becomes 'Private' once pet owners' signup / login is enabled
 apiRouter.get('/bio', auth, async (req, res) => {
 
@@ -198,10 +198,13 @@ apiRouter.get('/bio', auth, async (req, res) => {
 // @route   POST api/v2/pet_owners 
 // @desc    Create or update owner bio data 
 // @access  Private
-apiRouter.post('/', 
+apiRouter.post('/bio', 
 [ 
   auth, 
   [
+    check('name', 'Your name is required please')
+      .not()
+      .isEmpty(),
     check('contactnumber', 'Your contact number is required')
       .isNumeric(),
     check('address', 'Address information is required')
@@ -215,7 +218,30 @@ async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const address = req.body.address; 
+  const { 
+    name, 
+    contactnumber, 
+    address,
+   // pets
+  } = req.body;
+
+  // Build owner bio object 
+  const ownerBio = {};
+  ownerBio.pet_owner = req.body.id;
+
+  if(name) ownerBio.name = name;
+  //if(contactnumber) ownerBio.contactnumber = contactnumber;
+  if(address) ownerBio.address = address;
+  /*
+  // Contact number is array, to enable multiple numbers' entry
+  if(contactnumber) {
+    ownerBio.contactnumber = contactnumber.split(',').map(contactnumber => contactnumber.trim());
+  }
+  */ 
+  console.log(contactnumber);
+
+  res.send('Test if contact number gymnastics works!');
+
 
 });
 
