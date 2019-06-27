@@ -52,4 +52,4 @@ const PetOwnerSchema = new Schema({
 	}
 }); 
  
-module.exports = PetOwner = mongoose.model('petowner', PetOwnerSchema); 
+module.exports = PetOwner = mongoose.model('pet_owner', PetOwnerSchema);
