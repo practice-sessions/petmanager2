@@ -9,7 +9,8 @@ const PetOwnerSchema = new Schema({
 	},
 	contactnumber: {
 		type: Number,
-	// required: 'Pet owners contact number is required'
+		required: 'Pet owners contact number is required',
+		unique: true
 	},
 	address: [
 		{
@@ -52,4 +53,4 @@ const PetOwnerSchema = new Schema({
 	}
 }); 
  
-module.exports = PetOwner = mongoose.model('pet_owner', PetOwnerSchema);
+module.exports = PetOwner = mongoose.model('pet_owner', PetOwnerSchema); 
