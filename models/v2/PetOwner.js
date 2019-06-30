@@ -5,10 +5,10 @@ const Schema = mongoose.Schema;
 const PetOwnerSchema = new Schema({
 	name: {
 		type: String,
-	//	required: 'A name is needed for the pet owner or client'
+		required: 'I need a name for the pet owner or client'
 	},
 	contactnumber: {
-		type: Number,
+		type: [Number],
 		required: 'Pet owners contact number is required',
 		unique: true
 	},
@@ -33,7 +33,7 @@ const PetOwnerSchema = new Schema({
   ],
 	pets: [
 		{
-			// Array allows possibility of more than one pet 
+			// Array allows possibility of more than one pet
 			type: Schema.Types.ObjectId,
 			ref: 'pet'
 		}
