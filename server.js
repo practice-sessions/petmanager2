@@ -1,5 +1,5 @@
 const express = require('express');
-const connectDB = require('./config/db'); 
+const connectDB = require('./config/db');
 
 const app = express();
 
@@ -12,17 +12,20 @@ app.use(express.json({ extended: false }));
 // End points
 app.get('/', (req, res) => res.send('API connected..'));
 
-// Define Routes
+// Define Routes 
 app.use('/api/v1/auth', require('./routes/api/v1/auth'));
 app.use('/api/v1/users', require('./routes/api/v1/users'));
-app.use('/api/v1/owner', require('./routes/api/v1/owner'));
+app.use('/api/v1/owner_bio', require('./routes/api/v1/owner_bio'));
 app.use('/api/v1/pet', require('./routes/api/v1/pet'));
 app.use('/api/v1/todos', require('./routes/api/v1/todos'));
 
 app.use('/api/v2/auth2', require('./routes/api/v2/auth2'));
 app.use('/api/v2/pet_owners', require('./routes/api/v2/pet_owners'));
 //app.use('/api/v2/pet2', require('./routes/api/v2/pet2'));
-//app.use('/api/v2/todos2', require('./routes/api/v2/todos2'));
+//app.use('/api/v2/todos2', require('./routes/api/v2/todos2')); 
+
+app.use('/api/v3/clients', require('./routes/api/v3/clients'));
+app.use('/api/v3/client_bio', require('./routes/api/v3/client_bio'));
 
 
 const PORT = process.env.PORT || 5000;
