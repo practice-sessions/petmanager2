@@ -196,9 +196,9 @@ apiRouter.get('/bio', auth, async (req, res) => {
 }); 
 
 // @route   POST api/v2/pet_owners 
-// @desc    Create or update owner bio data 
+// @desc    Create or update pet owner bio data 
 // @access  Private
-apiRouter.post('/bio', 
+apiRouter.post('/', 
 [ 
   auth, 
   [
@@ -207,9 +207,11 @@ apiRouter.post('/bio',
       .isEmpty(),
     check('contactnumber', 'Your contact number is required')
       .isNumeric(),
+      /*
     check('address', 'Address information is required')
       .not()
       .isEmpty()
+      */
   ] 
 ], 
 async (req, res) => {
@@ -221,26 +223,49 @@ async (req, res) => {
   const { 
     name, 
     contactnumber, 
-    address,
+   // address,
    // pets
   } = req.body;
 
-  // Build owner bio object 
-  const ownerBio = {};
-  ownerBio.pet_owner = req.body.id;
+  // Build owner ownerBio object 
+  const ownerBioFields = {};
+  ownerBioFields.pet_owner = req.body.id;
 
-  if(name) ownerBio.name = name;
-  //if(contactnumber) ownerBio.contactnumber = contactnumber;
-  if(address) ownerBio.address = address;
+  if(name) ownerBioFields.name = name;
+  if(contactnumber) ownerBioFields.contactnumber = contactnumber;
+  //if(address) ownerBioFields.address = address;
   /*
-  // Contact number is array, to enable multiple numbers' entry
+  // For use later, if contact number is array, 
+  // to enable multiple numbers' entry - **needs attention**
   if(contactnumber) {
-    ownerBio.contactnumber = contactnumber.split(',').map(contactnumber => contactnumber.trim());
+    ownerBioFields.contactnumber = contactnumber.split(',').map(contactnumber => contactnumber.trim());
   }
-  */ 
-  console.log(contactnumber);
+  */
+  
+  try {
+    let ownerBio = await PetOwner.findOne({ pet_owner: req.body.id });
 
-  res.send('Test if contact number gymnastics works!');
+    if(ownerBio) {
+      // Update 
+      ownerBio = await PetOwner.findOneAndUpdate(
+        { pet_owner: req.body.id },
+        { $set: ownerBio },
+        { new: true }
+      );
+
+      return res.json(ownerBio);
+    }
+
+    // Create 
+    ownerBio = new PetOwner(ownerBioFields);
+
+    await ownerBio.save();
+    res.json(ownerBio);
+
+  } catch(err) {
+    console.error(err.message);
+    res.status(500).send('Server error, something went wrong!');
+  }
 
 
 });
