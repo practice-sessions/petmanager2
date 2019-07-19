@@ -10,28 +10,18 @@ const { check, validationResult } = require('express-validator');
 // Load Client model
 const Client = require('../../../models/v3/Client'); 
 
-/*
 // @route   GET api/v3/clients/add  
 // @desc    Show register client without auth FORM - (Admin add client) 
 // @access  Public
-apiRouter.get('/add', 
-// isNumeric() used for contact number for now, 
-  //will change to isMobilePhone() later
-  [
-    check('name', 'Your name is required please')
-      .not()
-      .isEmpty(),
-    check('contactnumber', 'Your contact number is required')
-    .isNumeric(),
-    //check('email', 'A valid email is required please').isEmail().normalizeEmail() 
-  ],  
-  (req, res) => {
-  const errors = validationResult(req);
-  if(!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+apiRouter.get('/add', (req, res) => {
+  res.render('client/add', { 
+    title: 'Add new Client',
+    name: '',
+    contactnumbers: '',
+    email: '',
+    avatar: ''
+  });
 });
-*/
 
 // @route   POST api/v3/clients/add  
 // @desc    Register client without auth - (Admin add client) 
