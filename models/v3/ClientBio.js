@@ -36,9 +36,9 @@ const ClientBioSchema = new Schema({
 	],
 	specialneed: {
 		type: String,
-		default: false
+		default: false 
 	},
-	vet: {
+	vetname: {
 		type: String,
 		required: true
 	},
