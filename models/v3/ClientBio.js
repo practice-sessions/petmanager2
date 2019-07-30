@@ -1,39 +1,47 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Create Schema - "ClientBio" == pet owner bio
+// Create Schema - "ClientBio" == pet owner bio 
 const ClientBioSchema = new Schema({
 	client: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'client'
   },
-  contactnumbers: {
+  contactnumber: {
 		type: [Number],
-		required: 'Confirm contact number please' 
+		required: true 
   },
   address: [
 		{
 			house: {
 				type: String,
-				//required: 'A house name or street number is required please' 
+				required: 'A house name or street number is required please' 
       },
       street: {
 				type: String,
-				//required: 'A street name is required please'
+				//required: 'A street name is required please' 
       }, 
       street2: {
         type: String
       },
       postcode: {
 				type: String,
-				//required: 'A postcode is required please'
+				required: 'A postcode is required please' 
       },
       city: {
 				type: String,
-				//required: 'A town or city name is required please'
+				required: 'A town or city name is required please' 
       },
 		}
-  ],
+	],
+	specialneed: {
+		type: String,
+		default: false
+	},
+	vet: {
+		type: String,
+		required: true
+	},
 	pets: [
 		{
 			// Array allows possibility of more than one pet 
@@ -46,5 +54,18 @@ const ClientBioSchema = new Schema({
 		default: Date.now
 	}
 });
+
+/*
+// findByContactnumber method 
+// - note: this would be defined/declared in the document (not necessarily here)
+ClientBioSchema.methods.findByContactnumber = function (contactnumber) {
+  return this.model('ClientBio').find({ contactnumber: this.contactnumber }, contactnumber);
+};
+
+// findByContactnumber static
+ClientBioSchema.static('findByContactnumber', function(contactnumber) {
+  return this.find({ contactnumber });
+});
+*/ 
  
 module.exports = ClientBio = mongoose.model('client_bio', ClientBioSchema); 
