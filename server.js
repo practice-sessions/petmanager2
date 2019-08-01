@@ -29,13 +29,11 @@ app.use('/api/v3/clients', require('./routes/api/v3/clients'));
 app.use('/api/v3/client_bio', require('./routes/api/v3/client_bio'));
 
 app.use('/api/v10/auth', require('./routes/api/v10/auth10'));
-app.use('/api/v1/users', require('./routes/api/v1/users'));
+//app.use('/api/v10/users1', require('./routes/api/v10/users1'));
 app.use('/api/v10/ownbio', require('./routes/api/v10/ownbio'));
 app.use('/api/v10/pet1', require('./routes/api/v10/pet1'));
 app.use('/api/v10/todos1', require('./routes/api/v10/todos1'));
-
-
-
+ 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
