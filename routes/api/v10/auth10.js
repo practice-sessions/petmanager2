@@ -1,17 +1,17 @@
 const express = require('express');
 const apiRouter = express.Router();
-const auth = require('../../../middleware/auth');
+const auth = require('../../../middleware/auth'); 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const { check, validationResult } = require('express-validator/check');
+const { check, validationResult } = require('express-validator');
 
-const User = require('../../../models/v1/User'); 
+const User = require('../../../models/v1/User');
 
-// @route   GET api/v1/auth
+// @route   GET api/v10/auth
 // @desc    Get user route, for use where auth is enabled
 // @access  Public 
-apiRouter.get('/', auth, async (req, res) => {
+apiRouter.get('/get-user', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     res.json(user); 
@@ -22,20 +22,18 @@ apiRouter.get('/', auth, async (req, res) => {
   }
 });
 
-// @route   POST api/v1/auth  
+// @route   POST api/v10/auth
 // @desc    Authenticate user with password, get token
-// @access  Public
+// @access  Public 
 apiRouter.post(
-  '/',  
+  '/auth-user',  
   // isNumeric() used for contact number for now, 
   //will change to isMobilePhone() later 
   [
     check('contactnumber', 'Your contact number is required')
-    .isNumeric(),
-    //check('email', 'A valid email is required please').isEmail(),
-    //custom email validation method may be needed 
+      .isNumeric(),
     check('password', 'Password is required please')
-    .exists()
+      .exists()
   ], 
   async (req, res) => {
   const errors = validationResult(req);
@@ -52,15 +50,18 @@ apiRouter.post(
   if(!user) {
     return res
       .status(400)
-      .json({ errors: [{ msg: 'Invalid user details!' }] });
+      // Remove error msg numbering before proction!
+      .json({ errors: [{ msg: 'Invalid user details - 1!' }] });
   }
 
+  // Match user input data against with password
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
     return res
       .status(400)
-      .json({ errors: [{ msg: 'Invalid user details!' }] });
+      // Remove error msg numbering before production! 
+      .json({ errors: [{ msg: 'Invalid user details - 2!' }] });
   }
   
   const payload = {
@@ -73,12 +74,12 @@ apiRouter.post(
   jwt.sign(
     payload, 
     config.get('jwtSecret'),
-    { expiresIn: 360000 },
+    { expiresIn: '3h' },
     (err, token) => {
       if (err) throw err;
       res.json({ token });
-    }); // Note: jwtSecret above is in config file' and
-    // 360000 used for expiration (in development), use 3600 in production
+    }); // Note: jwtSecret above is in config file' and if '3h' used
+        // for expiration (in development), use 3600 in production 
   
 } catch(err) {
   console.error(err.message);
