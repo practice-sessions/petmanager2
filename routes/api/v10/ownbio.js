@@ -18,8 +18,6 @@ const User = require('../../../models/v1/User');
 // @access  Public
 apiRouter.get('/', (req, res) => res.send({ message: 'Owners does work!' }));
 
- 
-
 // @route   POST api/v10/ownbio 
 // @desc    Create or update owner bio data 
 // @access  Private
@@ -90,6 +88,29 @@ async (req, res) => {
     res.status(500).send('Server error, something went wrong!');
   } 
 
+});
+
+// @route   GET api/v10/ownbio/named
+// @desc    Get current owner's bio data by id 
+// @access  Public (for now). Becomes 'Private' once users' signup / login is enabled
+apiRouter.get('/named', auth, async (req, res) => {
+
+  try {
+    const ownbio = await 
+      OwnBio
+        .findOne({user: req.user.id})
+        .populate('user', ['firstname', 'lastname', 'contactnumber']);// Pull required data from user profile 
+
+        if (!ownbio) {
+          return res.status(400).json({msg: 'There is no owner bio data for this user'});
+        }
+
+        res.json(ownbio);
+
+  } catch(err) {
+    console.error(err.message);
+    res.status(500).send('Server error, something went wrong!');
+  }
 });
 
 module.exports = apiRouter; 
