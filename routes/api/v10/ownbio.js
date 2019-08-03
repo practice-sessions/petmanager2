@@ -108,17 +108,43 @@ apiRouter.get('/named', auth, async (req, res) => {
 
 // @route   GET api/v10/ownbio/all
 // @desc    Get all owners' bio data 
-// @access  Public (for now). Becomes 'Private' once users' signup / login is enabled
+// @access  Public 
 apiRouter.get('/all', async (req, res) => {
   try {
-    const ownbio = await OwnBio.find().populate('user', ['firstname', 'lastname', 'contactnumber', 'avatar']);
-    res.json(ownbio);
+    const ownbios = await OwnBio.find().populate('user', ['firstname', 'lastname', 'contactnumber', 'avatar']);
+    res.json(ownbios);
 
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error, something went wrong!');
   }
-});
+}); 
 
+// @route   GET api/v10/ownbio/user/:user_id
+// @desc    Get owner bio data by user id
+// @access  Public 
+apiRouter.get('/user/:user_id', async (req, res) => {
+  try {
+    const ownbio = await OwnBio
+      .findOne({ user: req.params.user_id })
+      .populate('user', ['firstname', 'lastname', 'contactnumber', 'avatar']);
+
+      if(!ownbio) return res.status(400)
+        .json({ msg: 'No owner bio for this user!' });
+
+    res.json(ownbio);
+
+  } catch (err) {
+    console.error(err.message);
+    // To minimise chancing of malicious "fishing", or random ObjectId probing
+    // in search address params, add if statement to make it more difficult
+    // by trying to avoid server error message in the "catch" 
+    if(err.kind == 'ObjectId') {
+      return res.status(400)
+        .json({ msg: 'No owner bio for this user!' });
+    }
+    res.status(500).send('Server error, something went wrong!');
+  }
+});
 
 module.exports = apiRouter; 
