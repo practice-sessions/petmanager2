@@ -63,13 +63,6 @@ async (req, res) => {
       ownbio = await OwnBio.findOneAndUpdate(
         { user: req.user.id }, 
         { $set: ownerBioFields },
-        /*
-        { 
-          $set: 
-          { ownerBioFields },
-          $currentDate: { lastModified: true }
-        },
-        */
         { new: true }
       );
 
@@ -112,5 +105,20 @@ apiRouter.get('/named', auth, async (req, res) => {
     res.status(500).send('Server error, something went wrong!');
   }
 });
+
+// @route   GET api/v10/ownbio/all
+// @desc    Get all owners' bio data 
+// @access  Public (for now). Becomes 'Private' once users' signup / login is enabled
+apiRouter.get('/all', async (req, res) => {
+  try {
+    const ownbio = await OwnBio.find().populate('user', ['firstname', 'lastname', 'contactnumber', 'avatar']);
+    res.json(ownbio);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error, something went wrong!');
+  }
+});
+
 
 module.exports = apiRouter; 
