@@ -10,7 +10,7 @@ const User = require('../../../models/v1/User');
 
 // @route   GET api/v10/auth
 // @desc    Get user route, for use where auth is enabled
-// @access  Public 
+// @access  Public
 apiRouter.get('/get-user', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
