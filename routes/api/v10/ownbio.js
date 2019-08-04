@@ -138,7 +138,7 @@ apiRouter.get('/user/:user_id', async (req, res) => {
     console.error(err.message);
     // To minimise chancing of malicious "fishing", or random ObjectId probing
     // in search address params, add if statement to make it more difficult
-    // by trying to avoid server error message in the "catch" 
+    // by trying to avoid server error message in the "catch"
     if(err.kind == 'ObjectId') {
       return res.status(400)
         .json({ msg: 'No owner bio for this user!' });
@@ -146,5 +146,26 @@ apiRouter.get('/user/:user_id', async (req, res) => {
     res.status(500).send('Server error, something went wrong!');
   }
 });
+
+// @route   DELETE api/v10/ownbio/delete
+// @desc    Delete owner bio data, user, & pets data
+// @access  Private
+apiRouter.delete('/delete', auth, async (req, res) => {
+  try {
+    // Remove owner-users pets here
+
+    //Remove owners bio
+    await OwnBio.findOneAndRemove({ user: req.user.id });
+
+    // Remove user - we use _id here because user is not a field in user model
+    await User.findOneAndRemove({ _id: req.user.id });
+
+    res.json({ msg: 'User deleted' });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error, something went wrong!');
+  }
+}); 
 
 module.exports = apiRouter; 
