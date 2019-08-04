@@ -168,4 +168,65 @@ apiRouter.delete('/delete', auth, async (req, res) => {
   }
 }); 
 
+// @route   POST api/v10/ownbio/address-to-bio // POST request used, rather than a PUT 
+// although we are updating data in an existing collection - personal preference
+// @desc    Add address to client bio data
+// @access  Private 
+apiRouter.post('/address-to-bio', 
+[ 
+  auth, 
+  [
+    check('house', 'A house name or street number is required please')
+      .not()
+      .isEmpty(),
+    check('postcode', 'A postcode is required please')
+      .not()
+      .isEmpty(),
+    check('city', 'A town or city name is required please')
+      .not()
+      .isEmpty()
+  ] 
+], async (req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const {
+    house,
+    street,
+    street2,
+    postcode,
+    city
+  } = req.body;
+
+  const addy = {
+    house,
+    street,
+    street2,
+    postcode,
+    city
+  }
+
+  try {
+    // Fetch owner bio to add address 
+    const ownbio = await OwnBio.findOne({ user: req.user.id });
+
+    // What if owner has no bio?
+
+    // Push address array onto the owner bio using unshift (not PUSH) so it goes
+    // into the beginning rather than at the end so we get the most recent first
+    ownbio.address.unshift(addy);
+
+    await ownbio.save();
+
+    res.json(ownbio);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error, something went wrong!');
+  }
+
+});
+
 module.exports = apiRouter; 
