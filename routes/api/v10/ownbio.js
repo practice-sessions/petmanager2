@@ -168,8 +168,8 @@ apiRouter.delete('/delete', auth, async (req, res) => {
   }
 }); 
 
-// @route   POST api/v10/ownbio/address-to-bio // POST request used, rather than a PUT 
-// although we are updating data in an existing collection - personal preference
+// @route   POST api/v10/ownbio/address-to-bio // POST request used, rather than a  
+// PUT although we are updating data in an existing collection - personal preference
 // @desc    Add address to client bio data
 // @access  Private 
 apiRouter.post('/address-to-bio', 
@@ -213,9 +213,13 @@ apiRouter.post('/address-to-bio',
     const ownbio = await OwnBio.findOne({ user: req.user.id });
 
     // What if owner has no bio?
+    if(!ownbio) {
+      return res.status(400)
+        .json({ msg: 'No owner bio for this user!' });
+    }
 
     // Push address array onto the owner bio using unshift (not PUSH) so it goes
-    // into the beginning rather than at the end so we get the most recent first
+    // into the beginning rather than at the end so we get the most recent first 
     ownbio.address.unshift(addy);
 
     await ownbio.save();
@@ -227,6 +231,30 @@ apiRouter.post('/address-to-bio',
     res.status(500).send('Server error, something went wrong!');
   }
 
+});
+
+// @route   DELETE api/v10/ownbio/address/:addy_id
+// @desc    Delete address from owner bio 
+// @access  Private
+apiRouter.delete('/address/:addy_id', auth, async (req, res) => {
+  try {
+    const ownbio = await OwnBio.findOne({ user: req.user.id });
+
+    // To get the right address to remove, get remove index 
+    const removeIndex = ownbio.address
+      .map(item => item.id)
+      .indexOf(req.params.addy_id);
+    
+    ownbio.address.splice(removeIndex, 1);
+
+    await ownbio.save();
+
+    res.json(ownbio);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error, something went wrong!');
+  }
 });
 
 module.exports = apiRouter; 
