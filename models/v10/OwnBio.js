@@ -6,7 +6,8 @@ const OwnBioSchema = new Schema({
 	user: {
     type: Schema.Types.ObjectId,
     ref: 'user'
-  },
+	},
+	// Array, so it may take multiple phone numbers
   contactnumber: {
 		type: [Number],
 		required: true 
@@ -19,7 +20,7 @@ const OwnBioSchema = new Schema({
       },
       street: {
 				type: String,
-				//required: 'A street name is required please' 
+				//required: 'A street name is required please'
       }, 
       street2: {
         type: String
@@ -34,6 +35,7 @@ const OwnBioSchema = new Schema({
       },
 		}
 	],
+	// Array, make it easier to process CSV's
 	specialneeds: {
 		type: [String],
 		required: true 
