@@ -15,7 +15,7 @@ const OwnBioSchema = new Schema({
 		{
 			house: {
 				type: String,
-				required: 'A house name or street number is required please' 
+				required: true 
       },
       street: {
 				type: String,
@@ -26,11 +26,11 @@ const OwnBioSchema = new Schema({
       },
       postcode: {
 				type: String,
-				required: 'A postcode is required please' 
+				required: true 
       },
       city: {
 				type: String,
-				required: 'A town or city name is required please' 
+				required: true 
       },
 		}
 	],
