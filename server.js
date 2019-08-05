@@ -16,8 +16,8 @@ app.get('/', (req, res) => res.send('API connected..'));
 app.use('/api/v1/users', require('./routes/api/v1/users')); 
 app.use('/api/v1/auth', require('./routes/api/v1/auth'));
 app.use('/api/v1/owner_bio', require('./routes/api/v1/owner_bio'));
-app.use('/api/v1/pet', require('./routes/api/v1/pet'));
-app.use('/api/v1/todos', require('./routes/api/v1/todos'));
+app.use('/api/v1/pet', require('./routes/api/v1/pet1'));
+app.use('/api/v1/todos', require('./routes/api/v1/todos1'));
 
 app.use('/api/v2/auth', require('./routes/api/v2/auth2'));
 app.use('/api/v2/pet_owners', require('./routes/api/v2/pet_owners'));
@@ -31,8 +31,8 @@ app.use('/api/v3/client_bio', require('./routes/api/v3/client_bio'));
 app.use('/api/v10/auth', require('./routes/api/v10/auth10'));
 //app.use('/api/v10/users', require('./routes/api/v10/users'));
 app.use('/api/v10/ownbio', require('./routes/api/v10/ownbio'));
-app.use('/api/v10/pet1', require('./routes/api/v10/pet1'));
-app.use('/api/v10/todos1', require('./routes/api/v10/todos1'));
+app.use('/api/v10/pets', require('./routes/api/v10/pets'));
+app.use('/api/v10/todos', require('./routes/api/v10/todos'));
  
 const PORT = process.env.PORT || 5000;
 
