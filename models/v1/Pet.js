@@ -17,7 +17,7 @@ const PetSchema = new Schema({
 		petbreed: {
 			type: String
 		},
-		avatar: {
+		petavatar: {
 			type: String // this may change to buffer 
 		},
     }
@@ -26,7 +26,7 @@ const PetSchema = new Schema({
 		type: Schema.Types.ObjectId, 
 		ref: 'users'
 	},
-	// Serves as unique identifier for each pet registered to owner
+	// Serves as unique identifier for each pet registered to owner 
 	firsteverarrivaldate: {
 		type: Date
 	},
