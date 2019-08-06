@@ -263,7 +263,7 @@ apiRouter.delete('/address/:addy_id', auth, async (req, res) => {
 
 // @route   POST api/v10/ownbio/addpet-to-ownbio // POST request used, rather than a  
 // PUT although we are updating data in an existing collection - personal preference
-// @desc    Create pet, and add to owner bio data 
+// @desc    Create pet, and add to owner bio data
 // @access  Private 
 apiRouter.post('/addpet-to-ownbio', 
 [ 
@@ -313,87 +313,5 @@ const pet = await newPet.save();
   }
 
 });
-
-// ========
-/*
-Cast to ObjectId failed for value 
-  "{ user: '5d45b5cb2bbe7c0eb8ae1d59', age: '8 years' }" at path "pets"
-*/
-
-// @route   POST api/v10/ownbio/addpetdata-to-ownbio // POST request used, rather than a  
-// PUT although we are updating data in an existing collection - personal preference
-// @desc    Create pet, and add to owner bio data 
-// @access  Private
-            // apiRouter.post('/addpetdata-to-ownbio', 
-            // [ 
-            //   auth, 
-            //   [
-            //   /*
-            //     check('petname', 'Please enter pet name')
-            //       .not()
-            //       .isEmpty(),
-            //     check('pettype', 'Please enter pet type')
-            //       .not()
-            //       .isEmpty(),
-            //     check('petbreed', 'Please enter pet breed')
-            //       .not()
-            //       .isEmpty()
-            //   */ 
-            //     check('age', 'How old is your pet?')
-            //       .not()
-            //       .isEmpty()
-            //   ] 
-            // ], async (req, res) => {
-            //   const errors = validationResult(req);
-            //   if(!errors.isEmpty()) {
-            //     return res.status(400).json({ errors: errors.array() });
-            //   }
-
-            //   const { age, firsteverarrivaldate } = req.body;
-            
-            // const petDataFields = {};
-
-            // petDataFields.user = req.user.id;
-
-            // if(age) petDataFields.age = age;
-            // if(firsteverarrivaldate) petDataFields.firsteverarrivaldate = firsteverarrivaldate;
-
-            //   try {
-            //     // Fetch owner bio to add pet data 
-            //     let ownbio = await OwnBio.findOne({ user: req.user.id });
-            //     
-            //     if(ownbio) {
-
-            //       // Update
-            //     // ownbio = new OwnBio(petDataFields);
-            //       ownbio.pets.unshift(petDataFields);
-
-            //       await ownbio.save();
-
-            //       return res.json(ownbio);
-            //     }
-
-            //     // What if user has bio? 
-            //     if(!ownbio) {
-                      
-            //     // Create 
-            //       ownbio = await OwnBio.findOneAndUpdate(
-            //         { user: req.user.id },
-            //         { $set: petDataFields },
-            //         { new: true }
-            //       );    
-
-            //     res.json(ownbio);
-            //   }
-
-            //   } catch (err) {
-            //     console.error(err.message);
-            //     res.status(500).send('Server error, something went wrong!');
-            //   }
-
-            // });
-
-
-// ======= 
 
 module.exports = apiRouter; 
