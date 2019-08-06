@@ -7,8 +7,8 @@ const apiRouter = express.Router({ mergeParams: true });
 
 const auth = require('../../../middleware/auth'); 
 const { check, validationResult } = require('express-validator');
-const jwt = require('jsonwebtoken');
-const config = require('config');
+//const jwt = require('jsonwebtoken');
+//const config = require('config');
 
 const OwnBio = require('../../../models/v10/OwnBio');
 const User = require('../../../models/v1/User');
@@ -111,7 +111,11 @@ apiRouter.get('/named', auth, async (req, res) => {
 // @access  Public 
 apiRouter.get('/all', async (req, res) => {
   try {
+    
     const ownbios = await OwnBio.find().populate('user', ['firstname', 'lastname', 'contactnumber', 'avatar']);
+    if (ownbios == 0 ) {
+      return res.status(400).json({msg: 'There is no owner bio data!'});
+    }
     res.json(ownbios);
 
   } catch (err) {
@@ -170,7 +174,7 @@ apiRouter.delete('/delete', auth, async (req, res) => {
 
 // @route   POST api/v10/ownbio/address-to-bio // POST request used, rather than a  
 // PUT although we are updating data in an existing collection - personal preference
-// @desc    Add address to client bio data
+// @desc    Add address to owner bio data 
 // @access  Private 
 apiRouter.post('/address-to-bio', 
 [ 
@@ -212,10 +216,10 @@ apiRouter.post('/address-to-bio',
     // Fetch owner bio to add address 
     const ownbio = await OwnBio.findOne({ user: req.user.id });
 
-    // What if owner has no bio?
+    // What if user has no bio?
     if(!ownbio) {
       return res.status(400)
-        .json({ msg: 'No owner bio for this user!' });
+        .json({ msg: 'No owner bio for this user!' }); 
     }
 
     // Push address array onto the owner bio using unshift (not PUSH) so it goes
@@ -256,5 +260,140 @@ apiRouter.delete('/address/:addy_id', auth, async (req, res) => {
     res.status(500).send('Server error, something went wrong!');
   }
 });
+
+// @route   POST api/v10/ownbio/addpet-to-ownbio // POST request used, rather than a  
+// PUT although we are updating data in an existing collection - personal preference
+// @desc    Create pet, and add to owner bio data 
+// @access  Private 
+apiRouter.post('/addpet-to-ownbio', 
+[ 
+  auth, 
+  [
+  /*
+    check('firsteverarrivaldate', 'Is this first time pet has been here?')
+      .not()
+      .isEmpty()
+  */ 
+    check('age', 'How old is your pet?')
+      .not()
+      .isEmpty()
+  ] 
+], async (req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const newPet = new Pet({ age: req.body.age });
+
+const pet = await newPet.save();
+
+  try {
+    // Fetch owner bio to add pet data 
+    const ownbio = await OwnBio.findOne({ user: req.user.id });
+    //const ownbio = await OwnBio.findOne({ pets: req.pet.id }); 
+
+    // What if user has no bio?
+    if(!ownbio) {
+      return res.status(400)
+        .json({ msg: 'No owner bio for this user!' }); 
+    }
+
+    // Push pets array onto the owner bio using unshift (not PUSH) so it goes
+    // into the beginning rather than at the end so we get the most recent first 
+    ownbio.pets.unshift(newPet);
+
+    await ownbio.save();
+
+    res.json(ownbio);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error, something went wrong!');
+  }
+
+});
+
+// ========
+/*
+Cast to ObjectId failed for value 
+  "{ user: '5d45b5cb2bbe7c0eb8ae1d59', age: '8 years' }" at path "pets"
+*/
+
+// @route   POST api/v10/ownbio/addpetdata-to-ownbio // POST request used, rather than a  
+// PUT although we are updating data in an existing collection - personal preference
+// @desc    Create pet, and add to owner bio data 
+// @access  Private
+            // apiRouter.post('/addpetdata-to-ownbio', 
+            // [ 
+            //   auth, 
+            //   [
+            //   /*
+            //     check('petname', 'Please enter pet name')
+            //       .not()
+            //       .isEmpty(),
+            //     check('pettype', 'Please enter pet type')
+            //       .not()
+            //       .isEmpty(),
+            //     check('petbreed', 'Please enter pet breed')
+            //       .not()
+            //       .isEmpty()
+            //   */ 
+            //     check('age', 'How old is your pet?')
+            //       .not()
+            //       .isEmpty()
+            //   ] 
+            // ], async (req, res) => {
+            //   const errors = validationResult(req);
+            //   if(!errors.isEmpty()) {
+            //     return res.status(400).json({ errors: errors.array() });
+            //   }
+
+            //   const { age, firsteverarrivaldate } = req.body;
+            
+            // const petDataFields = {};
+
+            // petDataFields.user = req.user.id;
+
+            // if(age) petDataFields.age = age;
+            // if(firsteverarrivaldate) petDataFields.firsteverarrivaldate = firsteverarrivaldate;
+
+            //   try {
+            //     // Fetch owner bio to add pet data 
+            //     let ownbio = await OwnBio.findOne({ user: req.user.id });
+            //     
+            //     if(ownbio) {
+
+            //       // Update
+            //     // ownbio = new OwnBio(petDataFields);
+            //       ownbio.pets.unshift(petDataFields);
+
+            //       await ownbio.save();
+
+            //       return res.json(ownbio);
+            //     }
+
+            //     // What if user has bio? 
+            //     if(!ownbio) {
+                      
+            //     // Create 
+            //       ownbio = await OwnBio.findOneAndUpdate(
+            //         { user: req.user.id },
+            //         { $set: petDataFields },
+            //         { new: true }
+            //       );    
+
+            //     res.json(ownbio);
+            //   }
+
+            //   } catch (err) {
+            //     console.error(err.message);
+            //     res.status(500).send('Server error, something went wrong!');
+            //   }
+
+            // });
+
+
+// ======= 
 
 module.exports = apiRouter; 
