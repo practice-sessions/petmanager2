@@ -1,30 +1,46 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Create Schema
+// Create Schema 
 const PetSchema = new Schema({
-	pets: [
+	/*
+	pets: {
+		type: [String]
+	},
+	*/
+	petbio: [
 		{
+			
 			petname: {
 				type: String,
 				required: true 
 			},
       pettype: {
-				// Array used to enable multiple pet types if needed - changed
+				// Array used to enable multiple pet types if needed - changed 
 				type: String,
 				required: true
-		},
-		petbreed: {
-			type: String
-		},
-		petavatar: {
+			},
+			petbreed: {
+				type: String
+			},
+			
+		}
+	],
+
+	ownbio: {
+		type: Schema.Types.ObjectId, 
+		ref: 'ownbio'
+	},
+	petavatar: {
 			type: String // this may change to buffer 
 		},
-    }
-	],
-	user: {
+  user: {
 		type: Schema.Types.ObjectId, 
 		ref: 'users'
+	},
+	age: {
+		type: String,
+		required: true
 	},
 	// Serves as unique identifier for each pet registered to owner 
 	firsteverarrivaldate: {

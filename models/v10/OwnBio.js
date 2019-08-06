@@ -35,7 +35,7 @@ const OwnBioSchema = new Schema({
       },
 		}
 	],
-	// Array, make it easier to process CSV's
+	// Array, make it easier to process CSV's 
 	specialneeds: {
 		type: [String],
 		required: true 
