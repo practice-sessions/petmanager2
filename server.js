@@ -19,14 +19,14 @@ app.use('/api/v1/owner_bio', require('./routes/api/v1/owner_bio'));
 app.use('/api/v1/pet', require('./routes/api/v1/pet1'));
 app.use('/api/v1/todos', require('./routes/api/v1/todos1'));
 
-app.use('/api/v2/auth', require('./routes/api/v2/auth2'));
-app.use('/api/v2/pet_owners', require('./routes/api/v2/pet_owners'));
+//app.use('/api/v2/auth', require('./routes/api/v2/auth2'));
+//app.use('/api/v2/pet_owners', require('./routes/api/v2/pet_owners'));
 //app.use('/api/v2/pet2', require('./routes/api/v2/pet2'));
 //app.use('/api/v2/todos2', require('./routes/api/v2/todos2')); 
 
 //app.use('/api/v3/auth', require('./routes/api/v3/auth3'));
-app.use('/api/v3/clients', require('./routes/api/v3/clients'));
-app.use('/api/v3/client_bio', require('./routes/api/v3/client_bio'));
+//app.use('/api/v3/clients', require('./routes/api/v3/clients'));
+//app.use('/api/v3/client_bio', require('./routes/api/v3/client_bio'));
 
 app.use('/api/v10/auth', require('./routes/api/v10/auth10'));
 //app.use('/api/v10/users', require('./routes/api/v10/users'));
