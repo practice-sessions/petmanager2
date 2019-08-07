@@ -45,7 +45,7 @@ async (req, res) => {
     specialneeds 
   } = req.body;
 
-  // Build owner bio object 
+  // Build owner bio object
   const ownerBioFields = {};
 
   ownerBioFields.user = req.user.id;
@@ -133,20 +133,22 @@ apiRouter.get('/user/:user_id', async (req, res) => {
       .findOne({ user: req.params.user_id })
       .populate('user', ['firstname', 'lastname', 'contactnumber', 'avatar']);
 
-      if(!ownbio) return res.status(400)
-        .json({ msg: 'No owner bio for this user!' });
+      if(!ownbio) 
+        return res.status(400).json({ msg: 'No owner bio for this user!' });
 
     res.json(ownbio);
 
   } catch (err) {
     console.error(err.message);
-    // To minimise chancing of malicious "fishing", or random ObjectId probing
-    // in search address params, add if statement to make it more difficult
-    // by trying to avoid server error message in the "catch"
+
+    // To minimise chancing of malicious "fishing", or random non-formatted 
+    // ObjectId probing in search address params, add if statement to make it
+    // more difficult by trying to avoid server error message in the "catch"
     if(err.kind == 'ObjectId') {
       return res.status(400)
         .json({ msg: 'No owner bio for this user!' });
     }
+
     res.status(500).send('Server error, something went wrong!');
   }
 });
@@ -156,7 +158,7 @@ apiRouter.get('/user/:user_id', async (req, res) => {
 // @access  Private
 apiRouter.delete('/delete', auth, async (req, res) => {
   try {
-    // Remove owner-users pets here
+    // *** Code. To. Remove owner-users pets here ***
 
     //Remove owners bio
     await OwnBio.findOneAndRemove({ user: req.user.id });
