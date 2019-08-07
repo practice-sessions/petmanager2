@@ -190,7 +190,7 @@ apiRouter.get('/all', auth, async (req, res) => {
 
 // @route   GET api/v10/pets/:id
 // @desc    Get pet data by id
-// @access  Private
+// @access  Private 
 apiRouter.get('/:id', auth, async (req, res) => {
   try {
     const pet = await Pet.findById(req.params.id);
@@ -207,6 +207,42 @@ apiRouter.get('/:id', auth, async (req, res) => {
     // To prevent status(500) error down below running prematurely when
     // non-formatted ObjectId-type possibly mis-spell or malicious (input) 
     // checking, we use the status(400) error handler as below 
+    if(err.kind === 'ObjectId') {
+      return res.status(400).json({ msg: 'Pet not found!' });
+    }
+
+    res.status(500).send('Server error, something went wrong!');
+  }
+});
+
+// @route   DELETE api/v10/pets/:id
+// @desc    Delete pet data 
+// @access  Private
+apiRouter.get('/:id', auth, async (req, res) => {
+  try {
+    const pet = await Pet.findById(req.params.id);
+
+    if(!pet) {
+      return res.status(400).json({ msg: 'Pet not found!' });
+    }
+
+    // Check user to confirm its the right pet owner.
+    // But logged in user (req.user.id) is a string, and pet.user is
+    // and ObjectId (not a string), use toString to prevent conflict errors
+    if(pet.user.toString !== req.user.id) {
+      return res.status(401).json({ msg: 'User not authorised!' })
+    }
+
+    await pet.remove();
+
+    res.json({ msg: 'Pet removed' });
+    
+  } catch (err) {
+    console.error(err.message);
+
+    // To prevent status(500) error down below running prematurely when
+    // non-formatted ObjectId-type possibly mis-spell or malicious (input) 
+    // checking, we use the status(400) error handler as below
     if(err.kind === 'ObjectId') {
       return res.status(400).json({ msg: 'Pet not found!' });
     }
