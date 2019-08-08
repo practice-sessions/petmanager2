@@ -1,4 +1,5 @@
 /node_modules
 /yarn.lock
 .vscode
-pseudocode.text
+pseudocode.txt
+/config
